@@ -32,7 +32,6 @@ parser.add_argument('--gpu_mode', type=bool, default=True)
 parser.add_argument('--threads', type=int, default=8, help='number of threads for data loader to use')
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
 
-# 需要修改
 parser.add_argument('--w_hr', default=0.2, help='weight of L1Loss_hr')
 parser.add_argument('--w_ppg', default=10, help='weight of negPearsonLoss_ppg')
 parser.add_argument('--w_rr', default=2, help='weight of L1Loss_rr')
@@ -47,7 +46,6 @@ opt = parser.parse_args()
 torch.cuda.set_device(local_rank)
 dist.init_process_group(backend='nccl', init_method='env://')
 
-# 让内置的 cuDNN 的 auto-tuner 自动寻找最适合当前配置的高效算法，来优化运行效率
 cudnn.benchmark = True
 print(opt)
 
@@ -182,7 +180,6 @@ if __name__ == '__main__':
                 test_loss_best = test_loss_temp
                 checkpoint()
 
-        # epochs跑一半时，降低学习率至原来的1/10
         if epoch!=0 and epoch % (opt.nEpochs / 2) == 0:
             for param_group in optimizer.param_groups:
                 param_group['lr'] /= 10.0
