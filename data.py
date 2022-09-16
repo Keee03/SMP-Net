@@ -5,6 +5,8 @@ import torch
 import torch.utils.data as data
 from torchvision.transforms import Compose, ToTensor
 
+# need to be modified!
+
 def transform():
     return Compose([
         ToTensor(),
@@ -35,6 +37,7 @@ class DatasetFromFolder(data.Dataset):
         self.transform = transform
 
     def __getitem__(self, index):
+        # my data sample [path, hr, sbp, dbp,rr,spo2]
         # ['20201021/21_1.2' '63.0' '133' '81' '23.81' '98.0']
         info = self.data[index]
         stmap_v,stmap_i,ppg = getSTMap(info[0])
