@@ -1,1 +1,1 @@
-# Non-contact multi-physiological signals estimation method based on multimodal fusion and refinement (SMP-Net)
+# Non-contact Multi-physiological Signals Estimation via Visible and Infrared Facial Features Fusion (SMP-Net)
