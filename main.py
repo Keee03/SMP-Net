@@ -23,8 +23,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "2,3"
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch HR estimation')
-parser.add_argument('--batchSize', type=int, default=32, help='training batch size')
-parser.add_argument('--testbatchSize', type=int, default=32, help='training batch size')
+parser.add_argument('--batchSize', type=int, default=16, help='training batch size')
+parser.add_argument('--testbatchSize', type=int, default=8, help='training batch size')
 parser.add_argument('--nEpochs', type=int, default=500, help='number of epochs to train for')
 parser.add_argument('--snapshots', type=int, default=50, help='Snapshots')
 parser.add_argument('--lr', type=float, default=1e-4, help='Learning Rate. Default=0.001')
@@ -36,6 +36,7 @@ parser.add_argument('--w_hr', default=0.2, help='weight of L1Loss_hr')
 parser.add_argument('--w_ppg', default=10, help='weight of negPearsonLoss_ppg')
 parser.add_argument('--w_rr', default=2, help='weight of L1Loss_rr')
 
+# need to be modified!
 parser.add_argument('--save_folder', default='model/', help='Location to save checkpoint models')
 parser.add_argument('--path_source', type=str, default='/home/som/8T/kz/DataProcessing/MMVS/')
 parser.add_argument('--traindata_path', type=str, default='trainlabels-0118.npy')
@@ -173,17 +174,21 @@ if __name__ == '__main__':
     print('===> Starting model ')
     for epoch in range(opt.nEpochs):
         model_train(epoch)
+        # test the model every 2 epochs
         if epoch % 2 == 0:
             model_eval(epoch)
+            # calculate the current test loss
             test_loss_temp = w_hr * loss_save[epoch][3] + w_rr * loss_save[epoch][7] + w_ppg * loss_save[epoch][-1]
+            # save the best model
             if test_loss_temp < test_loss_best:
                 test_loss_best = test_loss_temp
                 checkpoint()
-
+        # adjust the learning rate.
         if epoch!=0 and epoch % (opt.nEpochs / 2) == 0:
             for param_group in optimizer.param_groups:
                 param_group['lr'] /= 10.0
             print('Learning rate decay: lr={}'.format(optimizer.param_groups[0]['lr']))
-
+            
+    # save the results
     name_results = 'results12-13-rr05.npy'
     np.save(name_results, loss_save)
