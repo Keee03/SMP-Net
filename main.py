@@ -32,9 +32,9 @@ parser.add_argument('--gpu_mode', type=bool, default=True)
 parser.add_argument('--threads', type=int, default=8, help='number of threads for data loader to use')
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
 
-parser.add_argument('--w_hr', default=0.2, help='weight of L1Loss_hr')
-parser.add_argument('--w_ppg', default=10, help='weight of negPearsonLoss_ppg')
-parser.add_argument('--w_rr', default=2, help='weight of L1Loss_rr')
+parser.add_argument('--w_hr', default=0.1, help='weight of L1Loss_hr')
+parser.add_argument('--w_ppg', default=1, help='weight of negPearsonLoss_ppg')
+parser.add_argument('--w_rr', default=0.05, help='weight of L1Loss_rr')
 
 # need to be modified!
 parser.add_argument('--save_folder', default='model/', help='Location to save checkpoint models')
